@@ -53,6 +53,15 @@ int peek(Stack *stack) {
     return stack->data[stack->top];
 }
 
+void push_at_bottom(Stack *stack, int element) {
+    if (isEmpty(stack)) {
+        push(stack, element)
+    }
+    int top = Stack.pop()
+    push_at_bottom(stack, element)
+    Stack.push(stack, top)
+}
+
 int main() {
     Stack myStack;
     initializeStack(&myStack);
