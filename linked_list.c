@@ -130,6 +130,52 @@ void print_list(struct LinkedList *list) {
     printf("\n");
 }
 
+// Function to search for a node in the linked list
+struct Node *search_node(struct LinkedList *list, int data) {
+    struct Node *current = list->head;
+    while (current != NULL) {
+        if (current->data == data) {
+            return current;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
+// Function to reverse the linked list
+void reverse_list(struct LinkedList *list) {
+    struct Node *prev = NULL, *current = list->head, *next;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    list->head = prev;
+}
+
+// Function to sort the linked list using bubble sort
+void bubble_sort(struct LinkedList *list) {
+    if (list->head == NULL || list->head->next == NULL) {
+        return;
+    }
+
+    int swapped;
+    do {
+        swapped = 0;
+        struct Node *current = list->head;
+        while (current->next != NULL) {
+            if (current->data > current->next->data) {
+                int temp = current->data;
+                current->data = current->next->data;
+                current->next->data = temp;
+                swapped = 1;
+            }
+            current = current->next;
+        }
+    } while (swapped);
+}
+
 int main() {
     struct LinkedList list;
 
@@ -150,6 +196,22 @@ int main() {
     delete_at_end(&list);
     delete_at_position(&list, 1);
 
+    print_list(&list);
+
+    // Search for a node
+    struct Node *found_node = search_node(&list, 40);
+    if (found_node != NULL) {
+        printf("Node found with data: %d\n", found_node->data);
+    } else {
+        printf("Node not found.\n");
+    }
+
+    // Reverse the linked list
+    reverse_list(&list);
+    print_list(&list);
+
+    // Sort the linked list
+    bubble_sort(&list);
     print_list(&list);
 
     destroy_list(&list);
