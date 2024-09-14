@@ -53,13 +53,52 @@ int peek(Stack *stack) {
     return stack->data[stack->top];
 }
 
+// Function to push an element at the bottom of the stack using an auxiliary stack
 void push_at_bottom(Stack *stack, int element) {
-    if (isEmpty(stack)) {
-        push(stack, element)
+    if (isFull(stack)) {
+        printf("Stack overflow!\n");
+        return;
     }
-    int top = Stack.pop()
-    push_at_bottom(stack, element)
-    Stack.push(stack, top)
+
+    Stack auxStack;
+    initializeStack(&auxStack);
+
+    // Move all elements from the original stack to the auxiliary stack
+    while (!isEmpty(stack)) {
+        push(&auxStack, pop(stack));
+    }
+
+    // Push the new element to the original stack
+    push(stack, element);
+
+    // Move all elements from the auxiliary stack back to the original stack
+    while (!isEmpty(&auxStack)) {
+        push(stack, pop(&auxStack));
+    }
+}
+
+// Function to sort the stack using an auxiliary stack
+void sortStack(Stack *stack) {
+    if (isEmpty(stack)) {
+        return;
+    }
+
+    Stack auxStack;
+    initializeStack(&auxStack);
+
+    // Pop elements from the original stack and insert them into the auxiliary stack in sorted order
+    while (!isEmpty(stack)) {
+        int temp = pop(stack);
+        while (!isEmpty(&auxStack) && auxStack.data[auxStack.top] > temp) {
+            push(stack, pop(&auxStack));
+        }
+        push(&auxStack, temp);
+    }
+
+    // Move the sorted elements back to the original stack
+    while (!isEmpty(&auxStack)) {
+        push(stack, pop(&auxStack));
+    }
 }
 
 int main() {
@@ -70,11 +109,18 @@ int main() {
     push(&myStack, 10);
     push(&myStack, 20);
     push(&myStack, 30);
+    push(&myStack, 5);
+    push(&myStack, 15);
+
+    // Sort the stack
+    sortStack(&myStack);
 
     // Peek at the top element
     printf("Top element: %d\n", peek(&myStack));
 
     // Pop elements from the stack
+    printf("Popped: %d\n", pop(&myStack));
+    printf("Popped: %d\n", pop(&myStack));
     printf("Popped: %d\n", pop(&myStack));
     printf("Popped: %d\n", pop(&myStack));
     printf("Popped: %d\n", pop(&myStack)); // Attempt to pop from an empty stack

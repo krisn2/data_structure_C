@@ -56,6 +56,19 @@ int peek(Queue *queue) {
     return queue->data[queue->front];
 }
 
+void sortQueue(Queue *queue) {
+    int i, j, temp;
+    for (i = 0; i < MAX_SIZE - 1; i++) {
+        for (j = 0; j < MAX_SIZE - i - 1; j++) {
+            if (queue->data[j] > queue->data[j + 1]) {
+                temp = queue->data[j];
+                queue->data[j] = queue->data[j + 1];
+                queue->data[j + 1] = temp;
+            }
+        }
+    }
+}
+
 int main() {
     Queue myQueue;
     initializeQueue(&myQueue);
@@ -64,8 +77,15 @@ int main() {
     enqueue(&myQueue, 10);
     enqueue(&myQueue, 20);
     enqueue(&myQueue, 30);
+    enqueue(&myQueue, 5);
+    enqueue(&myQueue, 15);
+
+    // Sort the queue
+    sortQueue(&myQueue);
 
     // Dequeue elements
+    printf("Dequeued: %d\n", dequeue(&myQueue));
+    printf("Dequeued: %d\n", dequeue(&myQueue));
     printf("Dequeued: %d\n", dequeue(&myQueue));
     printf("Dequeued: %d\n", dequeue(&myQueue));
     printf("Dequeued: %d\n", dequeue(&myQueue)); // Attempt to dequeue from an empty queue
